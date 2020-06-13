@@ -2,12 +2,25 @@
 #include<time.h>
 #include<windows.h>
 #include <ctime>
+#include<conio.h>
 using namespace std;
-void gotoxy(int x,int y){
+void setcolor(int num){
+	int n;
+	switch (num)
+	{
+	case 0: n = 0x0C; break;
+	case 1: n = 0x08; break;
+	case 2: n = 0x0E; break;
+	case 3: n = 0x0D; break;
+	case 4: n = 0x0A; break;
+	}
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), n);
+}
+void gotoxy(int x, int y) {
 	HANDLE hout;
 	COORD coor;
-	coor.X=x;
-	coor.Y=y;
+	coor.X = x;
+	coor.Y = y;
 	hout = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hout, coor);
 }//控制光标位置的函数 
@@ -72,9 +85,7 @@ void draw::drawborder(){
 	gotoxy(40,15);
 	cout<<"空格键暂停"; 
 }
-class game{
-	
-};//游戏类 
+ 
 
 int main()
 {
