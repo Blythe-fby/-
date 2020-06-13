@@ -62,7 +62,7 @@ bool Block::isDown()//是否接触到框下边
 	return true;
 }
 
-bool Block::isLeft()//是否接触到框右边 
+bool Block::isLeft()//是否接触到框左边 
 {
 	for(int i=0;i<20;i++)	
 		if(1==ground->background[i][0])
@@ -73,7 +73,7 @@ bool Block::isLeft()//是否接触到框右边
 bool Block::isRight()//是否接触到框右边 
 {
 	for(int i=0;i<20;i++)	
-		if(1==ground->background[i][11])		
+		if(1==ground->background[i][9])		
 			return false;			
 	return true;
 }
@@ -92,7 +92,7 @@ bool Block::isDown_collide()//下落障碍碰撞*
 bool Block::isLeft_collide()//左移障碍碰撞* 
 {
 	for(int i=0;i<20;i++)	
-		for(int j=0;j<10;j++)		
+		for(int j=1;j<10;j++)		
 			if(1==ground->background[i][j])			
 				if(2==ground->background[i][j-1]) 				
 					return false;
@@ -100,10 +100,10 @@ bool Block::isLeft_collide()//左移障碍碰撞*
 	return true;
 }
 
-bool Block::isRright_collide()//右移障碍碰撞* 
+bool Block::isRight_collide()//右移障碍碰撞* 
 {
 	for(int i=0;i<20;i++)	
-		for(int j=9;j>=0;j--)		
+		for(int j=8;j>=0;j--)		
 			if(1==ground->background[i][j])			
 				if(2==ground->background[i][j+1])				
 					return false;//&同理 										
@@ -112,30 +112,25 @@ bool Block::isRright_collide()//右移障碍碰撞*
  
 void Block::fall()//下落*
 {
-	for(int i=0;i<sizeof(point)/sizeof(POINT); i++)
-	{
-		point[i].y +=20;
-	}
+	
 	for(int i=19;i>=0;i--)
 	{
 		for(int j=0;j<10;j++)
 		{
 			if(1==ground->background[i][j])
-			{
+			{				
 				ground->background[i+1][j]=ground->background[i][j];//&使（1）方块下面的方块变为（1） 
 				ground->background[i][j]=0;//&每次移动方块的下落是使（1）方块变为（0） 
 			}
 		}
 	}
+	
 	//squareline++;
 }
 
 void Block::MoveLeft()//左移 
 {
-	for(int i=0;i<sizeof(point)/sizeof(POINT);i++)
-	{
-		point[i].x-=20;
-	}
+	
 	for(int i=0;i<20;i++)
 	{
 		for(int j=0;j<10;j++)
@@ -154,10 +149,7 @@ void Block::MoveLeft()//左移
 //右移* 
 void Block::MoveRight()
 {
-	for(int i=0;i<sizeof(point)/sizeof(POINT);i++)
-	{
-		point[i].x+=20;
-	}
+	
 	for(int i=0;i<20; i++)
 	{
 		for(int j=9;j>=0;j--)
@@ -171,9 +163,9 @@ void Block::MoveRight()
 	}
 	//squarelist++;
 }
-void Block::Fix()//固定函数 
+int Block::Fix()//固定函数 
 {
-	if(!isDown_collide()&&!isDown()) //两个下落判断函数都传回false 
+	if(!isDown_collide()||!isDown()) //两个下落判断函数有一个传回false 
 	{
 		for(int i=0;i<20;i++)
 		{
@@ -182,13 +174,21 @@ void Block::Fix()//固定函数
 				if(1==ground->background[i][j])
 				{
 					ground->background[i][j]=2;//1>>2; 
-					num = 0;// 
+					num = 0;
 				}
 			}
 		}
+		
+		return 0;
 	}
-	
+	return 1;
 }
+void Block::proofull()
+{
+	for(int i=0;i<10;i++)
+		if(1==ground->background[0][i])
+			system("pause");
+ } 
 //判断是否满行* 
 bool Block::isFull(int a)//&第a行是否满行 
 {
@@ -207,7 +207,7 @@ bool Block::isFull(int a)//&第a行是否满行
 
 void Block::del()//消行* 
 {
-	for(int i=0;i<20;i++)
+	for(int i=19;i>=0;i++)
 	{
 		if(isFull(i))//&第i行的满行函数return true时 
 		{
